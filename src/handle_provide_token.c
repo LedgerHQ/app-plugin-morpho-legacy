@@ -1,7 +1,5 @@
 #include "morpho_plugin.h"
 
-void handle_provide_token(void *parameters) {
-    ethPluginProvideInfo_t *msg = (ethPluginProvideInfo_t *) parameters;
-
+void handle_provide_token(ethPluginProvideInfo_t *msg) {
     msg->result = ETH_PLUGIN_RESULT_OK;
 }
