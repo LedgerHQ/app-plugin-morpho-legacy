@@ -15,7 +15,6 @@ static bool handle_warning_ui(ethQueryContractUI_t *msg, context_t *context) {
         msg->msg[1] = 'x';
         ret = getEthAddressStringFromBinary((uint8_t *) context->user_address,
                                             msg->msg + 2,
-                                            msg->pluginSharedRW->sha3,
                                             0);
     } else {
         PRINTF("ERROR IN HANDLE WARNING UI\n");
