@@ -13,10 +13,7 @@ static bool handle_warning_ui(ethQueryContractUI_t *msg, context_t *context) {
         strlcpy(msg->title, TITLE_ON_BEHALF_UI, msg->titleLength);
         msg->msg[0] = '0';
         msg->msg[1] = 'x';
-        ret = getEthAddressStringFromBinary((uint8_t *) context->user_address,
-                                            msg->msg + 2,
-                                            msg->pluginSharedRW->sha3,
-                                            0);
+        ret = getEthAddressStringFromBinary((uint8_t *) context->user_address, msg->msg + 2, 0);
     } else {
         PRINTF("ERROR IN HANDLE WARNING UI\n");
     }

@@ -1,15 +1,5 @@
 #include "morpho_plugin.h"
 
-static int find_selector(uint32_t selector, const uint32_t *selectors, size_t n, selector_t *out) {
-    for (selector_t i = 0; i < n; i++) {
-        if (selector == selectors[i]) {
-            *out = i;
-            return 0;
-        }
-    }
-    return -1;
-}
-
 // Called once to init.
 void handle_init_contract(ethPluginInitContract_t *msg) {
     // Make sure we are running a compatible version.
@@ -37,7 +27,7 @@ void handle_init_contract(ethPluginInitContract_t *msg) {
 
     // Find tx selector
     uint32_t selector = U4BE(msg->selector, 0);
-    if (find_selector(selector, MORPHO_SELECTORS, NUM_SELECTORS, &context->selectorIndex)) {
+    if (!find_selector(selector, MORPHO_SELECTORS, NUM_SELECTORS, &context->selectorIndex)) {
         PRINTF("can't find selector\n");
         msg->result = ETH_PLUGIN_RESULT_UNAVAILABLE;
         return;
