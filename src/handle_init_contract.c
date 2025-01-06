@@ -1,20 +1,7 @@
 #include "morpho_plugin.h"
 
-static int find_selector(uint32_t selector, const uint32_t *selectors, size_t n, selector_t *out) {
-    for (selector_t i = 0; i < n; i++) {
-        if (selector == selectors[i]) {
-            *out = i;
-            return 0;
-        }
-    }
-    return -1;
-}
-
 // Called once to init.
-void handle_init_contract(void *parameters) {
-    // Cast the msg to the type of structure we expect (here, ethPluginInitContract_t).
-    ethPluginInitContract_t *msg = (ethPluginInitContract_t *) parameters;
-
+void handle_init_contract(ethPluginInitContract_t *msg) {
     // Make sure we are running a compatible version.
     if (msg->interfaceVersion != ETH_PLUGIN_INTERFACE_VERSION_LATEST) {
         // If not the case, return the `UNAVAILABLE` status.
@@ -39,12 +26,13 @@ void handle_init_contract(void *parameters) {
     explicit_bzero(context, sizeof(*context));
 
     // Find tx selector
-    uint32_t selector = U4BE(msg->selector, 0);
-    if (find_selector(selector, MORPHO_SELECTORS, NUM_SELECTORS, &context->selectorIndex)) {
+    size_t index;
+    if (!find_selector(U4BE(msg->selector, 0), MORPHO_SELECTORS, NUM_SELECTORS, &index)) {
         PRINTF("can't find selector\n");
         msg->result = ETH_PLUGIN_RESULT_UNAVAILABLE;
         return;
     }
+    context->selectorIndex = index;
 
     // Set `next_param` to be the first field we expect to parse.
     switch (context->selectorIndex) {

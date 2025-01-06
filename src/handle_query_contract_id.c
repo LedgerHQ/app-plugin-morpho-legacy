@@ -12,9 +12,7 @@ const uint8_t COMMON_REWARDS_DISTRIBUTOR[ADDRESS_LENGTH] = {
     0x68, 0x80, 0x98, 0x32, 0x6f, 0xd4, 0xb4, 0x29, 0x21, 0x35};
 
 // Sets the first screen to display.
-void handle_query_contract_id(void *parameters) {
-    ethQueryContractID_t *msg = (ethQueryContractID_t *) parameters;
-
+void handle_query_contract_id(ethQueryContractID_t *msg) {
     strlcpy(msg->name, PLUGIN_NAME, msg->nameLength);
 
     if (!(memcmp(COMPOUND_MORPHO, msg->pluginSharedRO->txContent->destination, ADDRESS_LENGTH)))
